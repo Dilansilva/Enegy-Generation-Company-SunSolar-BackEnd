@@ -1,19 +1,32 @@
 const express = require('express');//import some express apps
+const mysql = require('mysql');//import some mysql apps
 
 const app = express();
+app.use(express.json());
 
-app.post('/login', (req, res) => {
-    console.log('Login!');
-    res.send({
-        name : 'Dilan'
-    });
+var mysqlConnection = mysql.createConnection({
+    host : "localhost",
+    user : "yourusername",
+    password : "password",
+    database : "EmployeeDB"
 });
 
-app.post('/customer', (req,res) => {
-    console.log('Customer Details');
+mysqlConnection.connect((err) => {
+    if(!err) 
+        console.log('Connected Successful!');
+    else 
+        console.log('Connection failed!');
+});
+
+app.post('/login', (req, res) => {//route for login
+    console.log('Login!');
+});
+
+app.post('/customer', (req,res) => {//route for enter customer details
+    console.log('Customer!');
 })
 
-app.post('/projects', (req, res) => {
+app.post('/projects', (req, res) => {//route for enter project deatails
     console.log('Project Details');
 });
 
