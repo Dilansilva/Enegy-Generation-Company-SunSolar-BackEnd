@@ -10,6 +10,7 @@ const databaseName = 'Projects';//database name
 
 
 app.post('/login', (req, res) => {//route for login
+    console.log('Login');
     MongoClient.connect(connectionURL, {useNewUrlParser : true,useUnifiedTopology: true}, (error, client) => {//connect to database
         if(error){//if the connection error occure
             return res.send('Unable to connect to database');//error message for connection
@@ -95,6 +96,6 @@ app.post('/projects', (req, res) => {//route for enter project deatails
     })
 });
 
-app.listen(4000, () => {
+app.listen(3000, () => {
     console.log('App listening on port 4000!');
 });
