@@ -68,7 +68,31 @@ app.post('/customer', (req,res) => {//route for enter customer details
 })
 
 app.post('/projects', (req, res) => {//route for enter project deatails
-    console.log('Project Details');
+  
+    MongoClient.connect(connectionURL, {useNewUrlParser : true,useUnifiedTopology: true},(error,client) => {
+        if(error){//When error ocuur
+            return res.status(500).send();
+        }else{
+            const db = client.db(databaseName);
+            db.collection('Projects').insertOne({
+                project_code : req.body.code,
+                customer_code : req.body.cus_code,
+                capacity : req.body.capacity,
+                geo_location : req.body.geo_location,
+                site_visit : req.body.site_visit,
+                visited_date : req.body.visited_date,
+                connection_type : req.body.connection_type,
+                grid_type : req.body.grid_type,
+                paymentbase : req.body.paymentbase
+            },(error,result) => {
+                if(error){
+                    return res.status(500).send('Error occured');
+                }if(result){
+                    return res.status(200).send('Added Successfully');
+                }
+            })
+        }
+    })
 });
 
 app.listen(4000, () => {
