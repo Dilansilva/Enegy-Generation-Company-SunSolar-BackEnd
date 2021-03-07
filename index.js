@@ -13,37 +13,34 @@ app.post('/login', (req, res) => {//route for login
     console.log(req.body);
 
     MongoClient.connect(connectionURL, {useNewUrlParser : true,useUnifiedTopology: true}, (error, client) => {//connect to database
-        if(error){
-            return console.error('error');
-        }else{
+        if(error){//if the connection error occure
+            return res.send('Unable to connect to database');//error message for connection
+        }else{//if the connection is succec
             const db = client.db(databaseName);
-            db.collection('user').findOne({
+            db.collection('user').findOne({//find the user email
                 user_mail : req.body.user_mail
             },(error,result) => {
-                if(error){
-                    console.log(error);
+                if(error){//if the connection error
+                    return res.send('Unable to connect to database');//error message
                 }
-                if(result != null){
-                    db.collection('user').findOne({
+                if(result != null){//if the email is matched
+                    db.collection('user').findOne({//matching the password
                         user_password : req.body.user_password   
                     },(error,result) => {
                         if(error){
-                            console.log(error);
-                        }if(result != null){
+                            return res.send('Unable to connect to database');
+                        }if(result != null){//if the email and password are correct
                             res.send('Logging');
-                        }else{
-                            res.send('Wrong password!');
+                        }else{//if the password is wrong
+                            return res.send('Wrong password!');
                         }
                     })
-                }else{
+                }else{//if the email is unmatched
                     return res.send('Unmatched email!');
                 }
             })
         }
     });
-    
-
-    
 });
 
 app.post('/customer', (req,res) => {//route for enter customer details
