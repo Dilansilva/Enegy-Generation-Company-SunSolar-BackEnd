@@ -10,8 +10,6 @@ const databaseName = 'Projects';//database name
 
 
 app.post('/login', (req, res) => {//route for login
-    console.log(req.body);
-
     MongoClient.connect(connectionURL, {useNewUrlParser : true,useUnifiedTopology: true}, (error, client) => {//connect to database
         if(error){//if the connection error occure
             return res.send('Unable to connect to database');//error message for connection
@@ -44,7 +42,29 @@ app.post('/login', (req, res) => {//route for login
 });
 
 app.post('/customer', (req,res) => {//route for enter customer details
-    console.log('Customer!');
+    
+    MongoClient.connect(connectionURL, {useNewUrlParser : true,useUnifiedTopology: true},(error,client) => {
+        if(error){//if error occure
+            return res.send('Unable to add Cutomer detais');
+        } else{//if the connection is success
+            const db = client.db(databaseName);
+            db.collection('Customer').insertOne({
+                customer_code : req.body.code,
+                customer_name : req.body.name,
+                customer_address : req.body.address,
+                customer_profession : req.body.profession,
+                customer_referred : req.body.referred,
+                customer_TP : req.body.TP,
+                customer_email : req.body.email
+             }, (error,result) => {
+                 if(error){//if the error occur
+                     return res.send('Unable to add data');
+                 }if(result){//success
+                     return res.send('Added Successfully');
+                 }
+             })
+        }
+    })
 })
 
 app.post('/projects', (req, res) => {//route for enter project deatails
